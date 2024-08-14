@@ -4,40 +4,47 @@
 #include <QApplication>
 #include <QFile>
 #include <QRadioButton>
+#include <QTextStream>
+#include <QDebug>
 
 
 
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QApplication a(argc, argv);
 
+    // Charger le fichier de style QSS
+      /* QFile file("C:/Users/Wizin/Desktop/Obit.qss"); // Assurez-vous que le chemin est correct
+       if (file.open(QFile::ReadOnly | QFile::Text)) {
+           QTextStream stream(&file);
+           QString styleSheet = stream.readAll();
+           a.setStyleSheet(styleSheet);
+           file.close();
+       } else {
+           qDebug() << "Impossible d'ouvrir le fichier QSS.";
+       }
+*/
 
 
-    // Create database connection
+
+
+    // Initialize database connection
     Connection c;
-    bool test = c.createconnect();
-
-
-    // Create main window
-    MainWindow w;
-
-
-    // Test database connection and display result
-    if (test) {
-
-
-        w.show();
-
-        QMessageBox::information(nullptr, QObject::tr("Database Open"),
-                                 QObject::tr("Connection successful.\nClick Cancel to exit."),
-                                 QMessageBox::Cancel);
-    } else {
+    if (!c.createconnect()) {
         QMessageBox::critical(nullptr, QObject::tr("Database Error"),
                               QObject::tr("Failed to connect to database.\nClick Cancel to exit."),
                               QMessageBox::Cancel);
+        return 1; // Early exit on database connection failure
     }
 
-    // Start event loop
-    return a.exec();
+    // Show the main window
+    MainWindow w;
+    w.show();
+    QMessageBox::information(nullptr, QObject::tr("Database Open"),
+                             QObject::tr("Connection successful.\nClick Cancel to exit."),
+                             QMessageBox::Cancel);
+
+    return a.exec(); // Start the event loop
 }

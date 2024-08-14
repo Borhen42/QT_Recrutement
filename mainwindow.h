@@ -38,6 +38,34 @@ private slots:
     void on_lineEdit_textChanged( QString text);
 
     void on_tri_fr_clicked();
+    void generatePDF( QString filePath);
+
+    void on_ajouter_fr_2_clicked();
+
+
+    void on_lineEdit_2_textChanged( QString text );
+
+    void generatePDFf( QString filePath);
+    void on_pdf_f_clicked();
+    void displaystat();
+    void markFormationDates();
+
+    void on_calendarWidget_selectionChanged();
+    void sendReminderEmails();
+
+
+
+
+
+
+
+    void on_tri_f_clicked();
+
+    void on_dateEdit_recherche_dateChanged(const QDate &date);
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;
