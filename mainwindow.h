@@ -69,6 +69,12 @@ private slots:
     void populateSpecialiteComboBox();
     void displaystatfr();
 
+    void on_pdf_fr_clicked();
+
+
+
+    void on_refresh_f_clicked();
+
 private:
     Ui::MainWindow *ui;
    Formation formation;

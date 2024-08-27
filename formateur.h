@@ -37,7 +37,7 @@ public:
     bool supprimer(int id);
     bool modifier(int id);
     static QSqlQueryModel* rechercherParNom( QString nom);
-    QSqlQueryModel *tri(const QString &columnName, Qt::SortOrder order);
+   QSqlQueryModel* Tri(QString cls, QString champ);
     QBarSeries* getStatSpecialites();
 
 

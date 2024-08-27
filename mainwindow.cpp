@@ -181,6 +181,14 @@ void MainWindow::on_modfi_f_clicked()
             return;
         }
 
+        // Vérifier la validité de la date
+        QDate aujourdhui = QDate::currentDate();
+        if (!journee.isValid() || journee < aujourdhui) {
+            QMessageBox::warning(this, "Date invalide", "La date doit être valide et ne peut pas être antérieure à aujourd'hui.");
+            return;
+        }
+
+
         // Créer une instance de la classe Formation avec les données récupérées
         Formation formation(id, titre, description, duree, date_de_debut, journee, formateur_id);
 
@@ -195,8 +203,6 @@ void MainWindow::on_modfi_f_clicked()
             ui->tableView_formations->setModel(formation.afficher());
 
             // Effacer les champs après modification
-            ui->idFormation->clear();
-            ui->lineEdit_titre->clear();
             ui->lineEdit_description->clear();
             ui->spinBox_duree->setValue(0);
             ui->timeEdit_date_de_debut->setTime(QTime::currentTime()); // Réinitialiser le QTime
@@ -206,6 +212,8 @@ void MainWindow::on_modfi_f_clicked()
 
             QMessageBox::information(this, "Modification réussie", "Formation modifiée avec succès.");
         } else {
+            ui->idFormation->clear();
+            ui->lineEdit_titre->clear();
             QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de la modification de la formation.");
         }
 }
@@ -244,14 +252,39 @@ void MainWindow::on_ajouter_fr_clicked()
         QString nom = ui->lineEdit_nom->text();
         QString email = ui->lineEdit_mail->text();
         QString telephone = ui->lineEdit_tel->text();
-        QString specialite = ui->comboBox_specialite->currentText();;
+        QString specialite = ui->comboBox_specialite->currentText();
         int experience = ui->spinBox_exp->value();
+
+        // Vérification des champs
 
         // Vérifier si tous les champs sont remplis
         if (nom.isEmpty() || email.isEmpty() || telephone.isEmpty() || specialite.isEmpty() || experience == 0) {
             QMessageBox::warning(this, "Champ(s) manquant(s)", "Veuillez remplir tous les champs.");
             return;
         }
+
+        // Vérifier le format de l'email avec une expression régulière
+           QRegularExpression emailRegex("^[\\w\\.-]+@[\\w\\.-]+\\.[a-zA-Z]{2,}$");
+           if (!emailRegex.match(email).hasMatch()) {
+               QMessageBox::warning(this, "Email invalide", "Veuillez entrer une adresse email valide.");
+               return;
+           }
+
+
+        // Vérifier que le numéro de téléphone contient uniquement des chiffres, espaces ou '+'
+        QRegularExpression phoneRegex("^\\+?[0-9 ]{7,15}$");
+        if (!phoneRegex.match(telephone).hasMatch()) {
+            QMessageBox::warning(this, "Téléphone invalide", "Veuillez entrer un numéro de téléphone valide (chiffres uniquement, avec ou sans '+').");
+            return;
+        }
+
+        // Vérifier que le nom contient uniquement des lettres et des espaces
+        QRegularExpression nameRegex("^[a-zA-Z\\s]+$");
+        if (!nameRegex.match(nom).hasMatch()) {
+            QMessageBox::warning(this, "Nom invalide", "Le nom ne doit contenir que des lettres et des espaces.");
+            return;
+        }
+
 
         // Créer une instance de la classe Formateur avec les données récupérées
         Formateur formateur(nom, email, telephone, specialite, experience);
@@ -261,18 +294,19 @@ void MainWindow::on_ajouter_fr_clicked()
 
         // Afficher un message en fonction du résultat de l'opération
         if (success) {
-
+            displaystatfr();
 
             QMessageBox::information(this, "Succès", "Le formateur a été ajouté avec succès.");
             // Optionnel : Effacer les champs après ajout
             ui->lineEdit_nom->clear();
             ui->lineEdit_mail->clear();
             ui->lineEdit_tel->clear();
-            ui->comboBox_specialite->clear();
+            ui->comboBox_specialite->setCurrentIndex(0);
             ui->spinBox_exp->setValue(0);
             // Optionnel : Mettre à jour l'affichage des formateurs
             ui->tableView_formateur->setModel(formateur.afficher());
             populateFormateurComboBox();
+            populateSpecialiteComboBox();
         } else {
             QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de l'ajout du formateur.");
         }
@@ -296,11 +330,34 @@ void MainWindow::on_modfi_fr_clicked()
             return;
         }
 
+        // Vérifier le format de l'email avec une expression régulière
+           QRegularExpression emailRegex("^[\\w\\.-]+@[\\w\\.-]+\\.[a-zA-Z]{2,}$");
+           if (!emailRegex.match(email).hasMatch()) {
+               QMessageBox::warning(this, "Email invalide", "Veuillez entrer une adresse email valide.");
+               return;
+           }
+
+
+        // Vérifier que le numéro de téléphone contient uniquement des chiffres, espaces ou '+'
+        QRegularExpression phoneRegex("^\\+?[0-9 ]{7,15}$");
+        if (!phoneRegex.match(telephone).hasMatch()) {
+            QMessageBox::warning(this, "Téléphone invalide", "Veuillez entrer un numéro de téléphone valide (chiffres uniquement, avec ou sans '+').");
+            return;
+        }
+
+        // Vérifier que le nom contient uniquement des lettres et des espaces
+        QRegularExpression nameRegex("^[a-zA-Z\\s]+$");
+        if (!nameRegex.match(nom).hasMatch()) {
+            QMessageBox::warning(this, "Nom invalide", "Le nom ne doit contenir que des lettres et des espaces.");
+            return;
+        }
+
         Formateur formateur(id, nom, email, telephone, specialite, experience);
 
         bool success = formateur.modifier(id);
 
         if (success) {
+            displaystatfr();
             ui->tableView_formateur->setModel(formateur.afficher());
 
             ui->idFormateur->clear();
@@ -343,6 +400,7 @@ void MainWindow::on_supp_fr_clicked()
         } else {
             QMessageBox::warning(this, "Aucun formateur sélectionné", "Veuillez sélectionner un formateur à supprimer.");
         }
+        displaystatfr();
 }
 
 void MainWindow::on_tableView_formateur_doubleClicked(const QModelIndex &index)
@@ -386,11 +444,23 @@ void MainWindow::on_lineEdit_textChanged(QString text)
 
 void MainWindow::on_tri_fr_clicked()
 {
-    // Call the sorting method in your Fournisseur class
-        QSqlQueryModel *sortedModel = formateur.tri("terme", Qt::AscendingOrder);
+    QString champ = "nom";  // Default sort column
+    QString order = "asc";  // Default sort order
 
-        // Set the sorted model to the table view
-        ui->tableView_formateur->setModel(sortedModel);
+    if (ui->comboBoxsortchamp_fr->currentText().compare("Email", Qt::CaseInsensitive) == 0) {
+        champ = "email";
+    } else if (ui->comboBoxsortchamp_fr->currentText().compare("Nom", Qt::CaseInsensitive) == 0) {
+        champ = "nom";
+    }
+
+    if (ui->comboBox_order_fr->currentText().compare("Descendant", Qt::CaseInsensitive) == 0) {
+        order = "desc";
+    }
+
+    qDebug() << "Order:" << order;
+    qDebug() << "Champ:" << champ;
+
+    ui->tableView_formateur->setModel(formateur.Tri(order, champ));
 }
 void MainWindow::generatePDF( QString filePath)
 {
@@ -760,13 +830,13 @@ void MainWindow::on_tri_f_clicked()
     QString champ = "titre";  // Par défaut, on trie par titre
        QString order = "asc";    // Par défaut, on trie de manière ascendante
 
-       if (ui->comboBoxsortchamp->currentText().compare("Journee") == 0) {
+       if (ui->comboBoxsortchamp_f->currentText().compare("Journee") == 0) {
            champ = "journee";
-       } else if (ui->comboBoxsortchamp->currentText().compare("Titre") == 0) {
+       } else if (ui->comboBoxsortchamp_f->currentText().compare("Titre") == 0) {
            champ = "titre";
        }
 
-       if (ui->comboBox_order->currentText().compare("Descendant") == 0) {
+       if (ui->comboBox_order_f->currentText().compare("Descendant") == 0) {
            order = "desc";
        }
        qDebug() << order ;
@@ -851,3 +921,15 @@ void MainWindow::displaystatfr() {
     ui->frameFR->layout()->addWidget(chartView);
 }
 
+
+void MainWindow::on_pdf_fr_clicked()
+{
+   generatePDF("");
+}
+
+
+
+void MainWindow::on_refresh_f_clicked()
+{
+   ui->tableView_formations->setModel(formation.afficher());
+}

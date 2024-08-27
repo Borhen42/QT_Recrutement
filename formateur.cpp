@@ -130,12 +130,21 @@ QSqlQueryModel* Formateur::rechercherParNom(QString terme) {
 
     return model;
 }
-QSqlQueryModel* Formateur::tri(const QString& columnName, Qt::SortOrder order)
-{
+QSqlQueryModel* Formateur::Tri(QString cls, QString champ) {
     QSqlQueryModel* model = new QSqlQueryModel();
-    QString sortOrder = (order == Qt::AscendingOrder) ? "ASC" : "DESC";
-    QString queryStr = "SELECT * FROM formateur ORDER BY " + columnName + " " + sortOrder;
-    model->setQuery(queryStr);
+    QString queryString = "SELECT * FROM formateur ORDER BY " + champ + " " + cls;
+    QSqlQuery query;
+    query.prepare(queryString);
+    query.exec();
+    model->setQuery(query);
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("NOM"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("EMAIL"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Téléphone"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Spécialité"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Expérience"));
+
+
     return model;
 }
 QBarSeries* Formateur::getStatSpecialites() {

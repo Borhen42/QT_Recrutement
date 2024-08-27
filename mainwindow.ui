@@ -295,8 +295,8 @@
        <widget class="QPushButton" name="pdf_f">
         <property name="geometry">
          <rect>
-          <x>1240</x>
-          <y>520</y>
+          <x>1350</x>
+          <y>470</y>
           <width>101</width>
           <height>31</height>
          </rect>
@@ -366,7 +366,7 @@
         <property name="title">
          <string>TRI</string>
         </property>
-        <widget class="QComboBox" name="comboBoxsortchamp">
+        <widget class="QComboBox" name="comboBoxsortchamp_f">
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -399,7 +399,7 @@
           <string>tri</string>
          </property>
         </widget>
-        <widget class="QComboBox" name="comboBox_order">
+        <widget class="QComboBox" name="comboBox_order_f">
          <property name="geometry">
           <rect>
            <x>20</x>
@@ -420,6 +420,19 @@
          </item>
         </widget>
        </widget>
+       <widget class="QPushButton" name="refresh_f">
+        <property name="geometry">
+         <rect>
+          <x>1210</x>
+          <y>520</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>refresh</string>
+        </property>
+       </widget>
        <zorder>frameF</zorder>
        <zorder>groupBox</zorder>
        <zorder>tableView_formations</zorder>
@@ -429,6 +442,7 @@
        <zorder>dateEdit_recherche</zorder>
        <zorder>calendarWidget</zorder>
        <zorder>groupBox_3</zorder>
+       <zorder>refresh_f</zorder>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -443,7 +457,7 @@
        <rect>
         <x>10</x>
         <y>0</y>
-        <width>1501</width>
+        <width>1601</width>
         <height>931</height>
        </rect>
       </property>
@@ -690,24 +704,11 @@
          </rect>
         </property>
        </widget>
-       <widget class="QPushButton" name="tri_fr">
-        <property name="geometry">
-         <rect>
-          <x>1350</x>
-          <y>290</y>
-          <width>101</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>tri</string>
-        </property>
-       </widget>
        <widget class="QPushButton" name="pdf_fr">
         <property name="geometry">
          <rect>
-          <x>1240</x>
-          <y>500</y>
+          <x>1350</x>
+          <y>460</y>
           <width>101</width>
           <height>31</height>
          </rect>
@@ -731,6 +732,72 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="geometry">
+         <rect>
+          <x>1390</x>
+          <y>140</y>
+          <width>181</width>
+          <height>181</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>GroupBox</string>
+        </property>
+        <widget class="QComboBox" name="comboBoxsortchamp_fr">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>40</y>
+           <width>91</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Nom</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Email</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QComboBox" name="comboBox_order_fr">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>80</y>
+           <width>91</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Ascendant</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Descendant</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QPushButton" name="tri_fr">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>140</y>
+           <width>101</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>tri</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_4">
